@@ -1,17 +1,20 @@
 services:
+
   mysql:
     image: mysql:8.4
+    container_name: incidenthub-mysql
     restart: unless-stopped
+
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
     volumes:
       - mysql_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    networks:
-      - incidenthub_network
+
     healthcheck:
       test:
         [
@@ -29,10 +32,15 @@ services:
       retries: 10
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+
+    container_name: incidenthub-backend
     restart: unless-stopped
+
     ports:
-      - "${BACKEND_PORT:-5673}:5673"
+      - "5673:5673"
+
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
@@ -42,11 +50,11 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
       BACKEND_PORT: 5673
+
     depends_on:
       mysql:
         condition: service_healthy
-    networks:
-      - incidenthub_network
+
     healthcheck:
       test:
         [
@@ -60,15 +68,22 @@ services:
       retries: 10
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+
+    container_name: incidenthub-frontend
     restart: unless-stopped
+
     ports:
       - "8070:80"
+
     depends_on:
       backend:
         condition: service_healthy
+
     networks:
       - incidenthub_network
+
     healthcheck:
       test:
         [
@@ -83,22 +98,25 @@ services:
       retries: 10
 
   nginx:
-    image: nginx:1.27-alpine
+    image: nginx:alpine
+    container_name: incidenthub-nginx
     restart: unless-stopped
+
     ports:
-      - "${NGINX_PORT:-8080}:80"
+      - "8082:80"
+
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
     depends_on:
       frontend:
-        condition: service_healthy
+        condition: service_started
       backend:
         condition: service_healthy
-    networks:
-      - incidenthub_network
-
-networks:
-  incidenthub_network:
 
 volumes:
   mysql_data:
+
+networks:
+  incidenthub_network:
+    driver: bridge
