@@ -1,29 +1,30 @@
 name: DevSecOps
 
 on:
-    push:
-        branches: [main]
+  push:
+    branches:
+      - main
 
 jobs:
 
-   # code stage (with shift left)
-    code-quality:
-        uses: ./.github/workflows/code-quality.yml
+  # Code Quality / Shift Left
+  code-quality:
+    uses: ./.github/workflows/code-quality.yml
 
-    #secrets Scanning
-    secret-Scanning:  
-        uses: ./.github/workflows/secret-scanning.yml 
+  # Secret Scanning
+  secret-scanning:
+    uses: ./.github/workflows/secret-scanning.yml
 
-     #Depedency Checks
-    dependency-scan:
-        uses: ./.github/workflows/dependency-scan.yml  
+  # Dependency Scanning
+  dependency-scan:
+    uses: ./.github/workflows/dependency-scan.yml
 
-     #Docker checks
-    docker-scans:   
-        uses:  ./.github/workflows/docker-scans.yml
-        secrets: inherit
+  # Docker Security Scanning
+  docker-scans:
+    uses: ./.github/workflows/docker-scans.yml
+    secrets: inherit
 
-    #Soanr Scanclear
-    sonar_qube:
-        uses:  ./.github/workflows/sonar-scan.yml 
-        secrets: inherit  
+  # SonarQube Scan
+  sonar-qube:
+    uses: ./.github/workflows/sonar-scan.yml
+    secrets: inherit
