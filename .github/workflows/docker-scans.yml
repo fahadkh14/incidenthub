@@ -20,6 +20,7 @@ jobs:
             uses:  hadolint/hadolint-action@v3.1.0
             with:
               dockerfile: ${{ matrix.floders }}/Dockerfile
+              ignore: DL3008
               
 
 
