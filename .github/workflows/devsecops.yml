@@ -8,4 +8,4 @@ jobs:
 
    # code stage (with shift left)
     code-quality:
-        uses: ./.hithub/workflows/code-quality.yml
+        uses: ./.github/workflows/code-quality.yml
