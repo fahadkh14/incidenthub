@@ -17,9 +17,7 @@ def _validate_incident_payload(payload, partial=False):
     errors = {}
 
     title = payload.get("title")
-    if (not partial or "title" in payload) and (
-        not title or not str(title).strip()
-    ):
+    if (not partial or "title" in payload) and (not title or not str(title).strip()):
         errors["title"] = "Title is required"
 
     severity = payload.get("severity")

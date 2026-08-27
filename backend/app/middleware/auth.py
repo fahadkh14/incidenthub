@@ -16,7 +16,11 @@ def roles_required(*roles):
             claims = get_jwt()
             role = claims.get("role")
             if role not in roles:
-                return error("You do not have permission to perform this action", "FORBIDDEN", 403)
+                return error(
+                    "You do not have permission to perform this action",
+                    "FORBIDDEN",
+                    403,
+                )
             return fn(*args, **kwargs)
 
         return wrapper

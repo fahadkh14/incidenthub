@@ -45,9 +45,7 @@ class Config:
         "JWT_SECRET",
         "change_me_to_a_secure_random_secret",
     )
-    JWT_ACCESS_TOKEN_EXPIRES = _parse_expires(
-        os.getenv("JWT_EXPIRES_IN", "1d")
-    )
+    JWT_ACCESS_TOKEN_EXPIRES = _parse_expires(os.getenv("JWT_EXPIRES_IN", "1d"))
     JWT_TOKEN_LOCATION: ClassVar = ["headers"]
 
     CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*")

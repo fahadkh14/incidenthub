@@ -12,7 +12,9 @@ class Activity(db.Model):
     __tablename__ = "activities"
 
     id = db.Column(db.String(36), primary_key=True, default=_uuid)
-    incident_id = db.Column(db.String(36), db.ForeignKey("incidents.id"), nullable=False)
+    incident_id = db.Column(
+        db.String(36), db.ForeignKey("incidents.id"), nullable=False
+    )
     user_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=True)
     action = db.Column(db.String(60), nullable=False)
     old_value = db.Column(db.String(255), nullable=True)

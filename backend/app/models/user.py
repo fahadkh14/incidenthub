@@ -37,9 +37,7 @@ class User(db.Model):
     )
 
     def set_password(self, raw_password: str):
-        self.password_hash = bcrypt.generate_password_hash(
-            raw_password
-        ).decode("utf-8")
+        self.password_hash = bcrypt.generate_password_hash(raw_password).decode("utf-8")
 
     def check_password(self, raw_password: str) -> bool:
         return bcrypt.check_password_hash(
@@ -53,14 +51,6 @@ class User(db.Model):
             "name": self.name,
             "email": self.email,
             "role": self.role,
-            "created_at": (
-                self.created_at.isoformat()
-                if self.created_at
-                else None
-            ),
-            "updated_at": (
-                self.updated_at.isoformat()
-                if self.updated_at
-                else None
-            ),
+            "created_at": (self.created_at.isoformat() if self.created_at else None),
+            "updated_at": (self.updated_at.isoformat() if self.updated_at else None),
         }

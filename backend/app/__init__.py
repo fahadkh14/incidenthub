@@ -18,7 +18,9 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     jwt.init_app(app)
     bcrypt.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": app.config.get("CORS_ORIGINS", "*")}})
+    cors.init_app(
+        app, resources={r"/api/*": {"origins": app.config.get("CORS_ORIGINS", "*")}}
+    )
 
     from app.routes import register_routes
 
@@ -89,4 +91,6 @@ def register_error_handlers(app):
 
     @app.errorhandler(403)
     def forbidden(e):
-        return error("You do not have permission to perform this action", "FORBIDDEN", 403)
+        return error(
+            "You do not have permission to perform this action", "FORBIDDEN", 403
+        )

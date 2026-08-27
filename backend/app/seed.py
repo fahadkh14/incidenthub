@@ -3,6 +3,7 @@
 Run inside the app context, e.g. via `flask shell` or the container entrypoint.
 Safe to run multiple times.
 """
+
 from datetime import datetime, timedelta, timezone
 
 from app.extensions import db
@@ -11,9 +12,24 @@ from app.models.user import Role, User
 from app.services.incident_service import generate_incident_number, log_activity
 
 DEMO_USERS = [
-    {"name": "Ava Admin", "email": "admin@incidenthub.local", "password": "Admin123!", "role": Role.ADMIN},
-    {"name": "Ethan Engineer", "email": "engineer@incidenthub.local", "password": "Engineer123!", "role": Role.ENGINEER},
-    {"name": "Vera Viewer", "email": "viewer@incidenthub.local", "password": "Viewer123!", "role": Role.VIEWER},
+    {
+        "name": "Ava Admin",
+        "email": "admin@incidenthub.local",
+        "password": "Admin123!",
+        "role": Role.ADMIN,
+    },
+    {
+        "name": "Ethan Engineer",
+        "email": "engineer@incidenthub.local",
+        "password": "Engineer123!",
+        "role": Role.ENGINEER,
+    },
+    {
+        "name": "Vera Viewer",
+        "email": "viewer@incidenthub.local",
+        "password": "Viewer123!",
+        "role": Role.VIEWER,
+    },
 ]
 
 DEMO_INCIDENTS = [
@@ -98,15 +114,24 @@ def run_seed():
         )
         if data["status"] in (Status.RESOLVED, Status.CLOSED):
             incident.resolved_at = datetime.now(timezone.utc) - timedelta(hours=idx)
-            incident.resolution = "Root cause identified and mitigated; monitoring for recurrence."
+            incident.resolution = (
+                "Root cause identified and mitigated; monitoring for recurrence."
+            )
 
         db.session.add(incident)
         db.session.flush()
 
-        log_activity(incident.id, admin.id, "Incident created", new_value=incident.incident_number)
+        log_activity(
+            incident.id,
+            admin.id,
+            "Incident created",
+            new_value=incident.incident_number,
+        )
         log_activity(incident.id, admin.id, "Engineer assigned", new_value=engineer.id)
         if data["status"] != Status.OPEN:
-            log_activity(incident.id, engineer.id, "Status changed", Status.OPEN, data["status"])
+            log_activity(
+                incident.id, engineer.id, "Status changed", Status.OPEN, data["status"]
+            )
 
     db.session.commit()
     return {"seeded": True, "users": len(DEMO_USERS), "incidents": len(DEMO_INCIDENTS)}

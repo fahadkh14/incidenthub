@@ -27,14 +27,18 @@ def register():
 
     existing = User.query.filter_by(email=email).first()
     if existing:
-        return error("An account with this email already exists", "DUPLICATE_EMAIL", 409)
+        return error(
+            "An account with this email already exists", "DUPLICATE_EMAIL", 409
+        )
 
     user = User(name=name, email=email, role=role)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
 
-    token = create_access_token(identity=user.id, additional_claims={"role": user.role, "name": user.name})
+    token = create_access_token(
+        identity=user.id, additional_claims={"role": user.role, "name": user.name}
+    )
 
     return success(
         {"user": user.to_dict(), "access_token": token},
@@ -56,7 +60,9 @@ def login():
     if not user or not user.check_password(password):
         return error("Invalid email or password", "INVALID_CREDENTIALS", 401)
 
-    token = create_access_token(identity=user.id, additional_claims={"role": user.role, "name": user.name})
+    token = create_access_token(
+        identity=user.id, additional_claims={"role": user.role, "name": user.name}
+    )
 
     return success({"user": user.to_dict(), "access_token": token}, "Login successful")
 

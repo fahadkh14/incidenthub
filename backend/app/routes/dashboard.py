@@ -16,7 +16,9 @@ def get_dashboard():
     total = Incident.query.count()
     open_count = Incident.query.filter(Incident.status == Status.OPEN).count()
     critical_count = Incident.query.filter(Incident.severity == Severity.P1).count()
-    investigating_count = Incident.query.filter(Incident.status == Status.INVESTIGATING).count()
+    investigating_count = Incident.query.filter(
+        Incident.status == Status.INVESTIGATING
+    ).count()
     resolved_count = Incident.query.filter(
         Incident.status.in_([Status.RESOLVED, Status.CLOSED])
     ).count()
@@ -31,7 +33,9 @@ def get_dashboard():
         severity_distribution[sev] = count
 
     status_rows = (
-        db.session.query(Incident.status, func.count(Incident.id)).group_by(Incident.status).all()
+        db.session.query(Incident.status, func.count(Incident.id))
+        .group_by(Incident.status)
+        .all()
     )
     status_distribution = {st: 0 for st in Status.ALL}
     for st, count in status_rows:
@@ -40,9 +44,7 @@ def get_dashboard():
     recent_incidents = (
         Incident.query.order_by(Incident.created_at.desc()).limit(6).all()
     )
-    recent_activity = (
-        Activity.query.order_by(Activity.created_at.desc()).limit(8).all()
-    )
+    recent_activity = Activity.query.order_by(Activity.created_at.desc()).limit(8).all()
 
     return success(
         {
