@@ -41,3 +41,38 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/incidenthub-frontend:latest
+
+  backend-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code 
+        uses: action/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          cache: 'pip
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+        working-directory: backend    
+
+      - name: Run Tests
+        run: pytest -v
+        working-directory: backend  
+      
+      - name: Docker Login 
+        uses: docker/login-action@v3 
+        with: 
+          username: ${{ vars.DOCKERHUB_USERNAME }} 
+          password: ${{ secrets.DOCKERHUB_TOKEN }} 
+          
+      - name: Docker Build and Push 
+        uses: docker/build-push-action@v6 
+        with: 
+          context: ./backend 
+          file: ./backend/Dockerfile 
+          push: true 
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/incidenthub-backend:latest
