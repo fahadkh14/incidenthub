@@ -8,5 +8,5 @@ python-dotenv==1.2.2
 PyMySQL==1.1.1
 gunicorn==22.0.0
 SQLAlchemy==2.0.32
-cryptography==49.0.0
+cryptography==50.0.0
 marshmallow==3.26.2
