@@ -1,0 +1,37 @@
+# Goal - I have to ensure the packages & dependencies have been audited for Security
+
+name: Dependency Scan
+
+on: 
+    workflow_call:
+
+jobs:
+    dependency-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Code Checkout
+              uses: actions/checkout@v7
+
+
+            - name: Set up Python
+              uses: actions/setup-python@v7
+              with:
+                python-version: 3.13
+
+            # =========================
+            # Dependency Security Scan
+            # =========================
+
+            - name: Install Dependency Scanner
+              run: pip install pip-audit
+              working-directory: backend
+
+            - name: Python Dependency Scan
+              run: pip-audit -r requirements.txt
+              working-directory: backend  
+
+            - name: Run Dependency  Scan for Node
+              run: npm audit
+              working-directory: frontend 
+
+            
