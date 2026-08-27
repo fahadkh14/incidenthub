@@ -1,0 +1,29 @@
+name: Python Backend Build
+
+on:
+  push:
+    branches: [advanced]
+  workflow_dispatch:
+
+jobs:
+  code-format:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-python@v7
+        with:
+          python-version: $ {{ matrix.python}}
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+        working-directory: backend    
