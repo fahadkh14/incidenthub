@@ -1,4 +1,4 @@
-name: incidenthub_CD
+name: IncidentHub CD
 
 on:
   workflow_call:
@@ -7,21 +7,20 @@ jobs:
   deploy:
     runs-on: self-hosted
 
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
 
-  steps:
-    - name: Code Checkout
-      uses: actions/checkout@v7
+      - name: Copy Example Env to Main Env
+        run: cp .example.env .env
 
-    - name: Copy Example Env to main Env
-      runs: cp .expmple.env .env   
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ vars.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Deploy the containers with Docker Compose
-      run: |
-        docker compose pull
-        docker compose up -d   
+      - name: Deploy Containers
+        run: |
+          docker compose pull
+          docker compose up -d
