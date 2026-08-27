@@ -1,9 +1,7 @@
 name: IncidentHub CI
 
 on:
-  push:
-    branches:
-      - main
+    workflow_dispatch:
 
 jobs:
   frontend-ci:
@@ -28,7 +26,8 @@ jobs:
         run: npm run lint
         working-directory: frontend
       
-      
+      - name: Code Quality
+        uses: .github/workflows/code-quality.yml
 
       - name: Docker Login
         uses: docker/login-action@v4
@@ -73,7 +72,8 @@ jobs:
         run: black --check .
         working-directory: backend    
 
-      
+      - name: Code Quality
+        uses: .github/workflows/code-quality.yml
       
       - name: Docker Login 
         uses: docker/login-action@v4

@@ -1,0 +1,11 @@
+name: DevSecOps
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+
+   # code stage (with shift left)
+    code-quality:
+        uses: ./.hithub/workflows/code-quality.yml
