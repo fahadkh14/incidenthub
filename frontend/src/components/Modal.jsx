@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { X } from "lucide-react";
-
 export default function Modal({ open, onClose, title, children, footer }) {
   useEffect(() => {
     if (!open) return;

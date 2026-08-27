@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { incidentService, userService } from "../services/incidentService";
 import { SEVERITIES, ENVIRONMENTS, CATEGORIES } from "../utils/constants";
