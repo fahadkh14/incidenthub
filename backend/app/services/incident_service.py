@@ -1,8 +1,8 @@
 from sqlalchemy import func
 
 from app.extensions import db
-from app.models.incident import Incident
 from app.models.activity import Activity
+from app.models.incident import Incident
 
 
 def generate_incident_number() -> str:

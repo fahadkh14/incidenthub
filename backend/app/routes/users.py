@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 
 from app.models.user import User
-from app.utils.responses import success, error
+from app.utils.responses import error, success
 
 users_bp = Blueprint("users", __name__, url_prefix="/api/users")
 

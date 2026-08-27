@@ -3,8 +3,8 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 
 from app.extensions import db
-from app.models.incident import Incident, Status, Severity
 from app.models.activity import Activity
+from app.models.incident import Incident, Severity, Status
 from app.utils.responses import success
 
 dashboard_bp = Blueprint("dashboard", __name__, url_prefix="/api/dashboard")

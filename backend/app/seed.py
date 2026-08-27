@@ -6,8 +6,8 @@ Safe to run multiple times.
 from datetime import datetime, timedelta, timezone
 
 from app.extensions import db
-from app.models.user import User, Role
-from app.models.incident import Incident, Severity, Status, Environment, Category
+from app.models.incident import Category, Environment, Incident, Severity, Status
+from app.models.user import Role, User
 from app.services.incident_service import generate_incident_number, log_activity
 
 DEMO_USERS = [

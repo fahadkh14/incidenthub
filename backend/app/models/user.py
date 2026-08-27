@@ -1,14 +1,16 @@
 import uuid
 from datetime import datetime, timezone
+from typing import ClassVar
 
-from app.extensions import db, bcrypt
+from app.extensions import bcrypt, db
 
 
 class Role:
     ADMIN = "ADMIN"
     ENGINEER = "ENGINEER"
     VIEWER = "VIEWER"
-    ALL = [ADMIN, ENGINEER, VIEWER]
+
+    ALL: ClassVar = [ADMIN, ENGINEER, VIEWER]
 
 
 def _uuid():
@@ -23,7 +25,11 @@ class User(db.Model):
     email = db.Column(db.String(160), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False, default=Role.ENGINEER)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    created_at = db.Column(
+        db.DateTime,
+        default=lambda: datetime.now(timezone.utc),
+    )
     updated_at = db.Column(
         db.DateTime,
         default=lambda: datetime.now(timezone.utc),
@@ -31,10 +37,15 @@ class User(db.Model):
     )
 
     def set_password(self, raw_password: str):
-        self.password_hash = bcrypt.generate_password_hash(raw_password).decode("utf-8")
+        self.password_hash = bcrypt.generate_password_hash(
+            raw_password
+        ).decode("utf-8")
 
     def check_password(self, raw_password: str) -> bool:
-        return bcrypt.check_password_hash(self.password_hash, raw_password)
+        return bcrypt.check_password_hash(
+            self.password_hash,
+            raw_password,
+        )
 
     def to_dict(self):
         return {
@@ -42,6 +53,14 @@ class User(db.Model):
             "name": self.name,
             "email": self.email,
             "role": self.role,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "created_at": (
+                self.created_at.isoformat()
+                if self.created_at
+                else None
+            ),
+            "updated_at": (
+                self.updated_at.isoformat()
+                if self.updated_at
+                else None
+            ),
         }

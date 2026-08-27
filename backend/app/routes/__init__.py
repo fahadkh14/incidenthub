@@ -1,8 +1,8 @@
 from app.routes.auth import auth_bp
-from app.routes.incidents import incidents_bp
 from app.routes.dashboard import dashboard_bp
-from app.routes.users import users_bp
 from app.routes.health import health_bp
+from app.routes.incidents import incidents_bp
+from app.routes.users import users_bp
 
 
 def register_routes(app):

@@ -1,12 +1,12 @@
 import logging
 
 from flask import Flask
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from flask_jwt_extended.exceptions import JWTExtendedException
 from jwt.exceptions import PyJWTError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from app.config import Config
-from app.extensions import db, migrate, jwt, bcrypt, cors
+from app.extensions import bcrypt, cors, db, jwt, migrate
 from app.utils.responses import error
 
 
