@@ -3,7 +3,7 @@ name: IncidentHub CI
 on:
   push:
     branches:
-      - advanced
+      - main
 
 jobs:
   frontend-ci:
