@@ -2,8 +2,9 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install pinned curl version for Docker healthcheck
+# Update OS security packages and install pinned curl
 RUN apt-get update \
+    && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends curl=8.14.1-2+deb13u4 \
     && rm -rf /var/lib/apt/lists/*
 
