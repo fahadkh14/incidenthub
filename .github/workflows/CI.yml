@@ -27,6 +27,8 @@ jobs:
       - name: Run Linter
         run: npm run lint
         working-directory: frontend
+      
+      
 
       - name: Docker Login
         uses: docker/login-action@v4
@@ -57,6 +59,18 @@ jobs:
 
       - name: Install Dependencies
         run: pip install -r requirements.txt
+        working-directory: backend  
+
+      - name: Install Lint Tools
+        run: pip install ruff black
+        working-directory: backend
+
+      - name: Ruff Lint
+        run: ruff check .
+        working-directory: backend
+
+      - name: Black Format Check
+        run: black --check .
         working-directory: backend    
 
       
