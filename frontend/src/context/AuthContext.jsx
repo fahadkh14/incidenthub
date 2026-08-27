@@ -40,7 +40,11 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    bootstrap();
+    const timer = setTimeout(() => {
+      bootstrap();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [bootstrap]);
 
   const login = async (email, password) => {
