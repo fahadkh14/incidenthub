@@ -1,4 +1,3 @@
-import React from "react";
 import { SEVERITY_COLORS, STATUS_COLORS } from "../utils/constants";
 
 export function SeverityBadge({ severity }) {

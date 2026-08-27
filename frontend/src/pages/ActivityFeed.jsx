@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { dashboardService } from "../services/incidentService";
+
 import Card from "../components/Card";
 import EmptyState from "../components/EmptyState";
 import { TableSkeleton } from "../components/Skeleton";
