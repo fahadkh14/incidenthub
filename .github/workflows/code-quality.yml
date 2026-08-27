@@ -2,49 +2,50 @@
 
 name: Code Quality
 
-on: 
-    workflow_call:
+on:
+  workflow_call:
 
 jobs:
-    sast:
-        runs-on: ubuntu-latest    
-        steps:
-          - name: Code Checkout
-            uses: actions/checkout@v7
+  sast:
+    runs-on: ubuntu-latest
 
-          - name: Setup Node.js
-            uses: actions/setup-node@v4
-            with:
-              node-version: 20
-              cache: npm
-              cache-dependency-path: frontend/package.json
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v7
 
-          - name: Install Dependencies
-            run: npm ci
-            working-directory: frontend
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
-          - name: Run Linter
-            run: npm run lint
-            working-directory: frontend
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: frontend
 
-          - name: Setup Python
-            uses: actions/setup-python@v7
-            with:
-              python-version: '3.13'
-              cache: 'pip'
+      - name: Run Frontend Linter
+        run: npm run lint
+        working-directory: frontend
 
-          - name: Install Dependencies
-            run: pip install -r requirements.txt
-            working-directory: backend  
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
 
-          - name: Install Lint Tools
-            run: pip install ruff black
-            working-directory: backend
+      - name: Install Backend Dependencies
+        run: pip install -r requirements.txt
+        working-directory: backend
 
-          - name: Ruff Lint
-            run: ruff check .
-            working-directory: backend
+      - name: Install Lint Tools
+        run: pip install ruff black
 
-          - name: Black Format Check
-            run: black --check .
-            working-directory: backend   
+      - name: Ruff Lint
+        run: ruff check .
+        working-directory: backend
+
+      - name: Black Format Check
+        run: black --check .
+        working-directory: backend
