@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { PlusCircle, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { incidentService } from "../services/incidentService";
@@ -42,25 +42,49 @@ export default function IncidentList() {
   const clearFilters = () => setSearchParams({});
 
   useEffect(() => {
-    setLoading(true);
-    incidentService
-      .list({
-        search: filters.search || undefined,
-        severity: filters.severity || undefined,
-        status: filters.status || undefined,
-        environment: filters.environment || undefined,
-        category: filters.category || undefined,
-        page: filters.page,
-        per_page: 10,
-      })
-      .then((res) => {
-        setItems(res.data.data.items);
-        setPagination(res.data.data);
-      })
-      .catch(() => toast.error("Could not load incidents"))
-      .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+    let cancelled = false;
+
+    const loadIncidents = async () => {
+      try {
+        const res = await incidentService.list({
+          search: filters.search || undefined,
+          severity: filters.severity || undefined,
+          status: filters.status || undefined,
+          environment: filters.environment || undefined,
+          category: filters.category || undefined,
+          page: filters.page,
+          per_page: 10,
+        });
+
+        if (!cancelled) {
+          setItems(res.data.data.items);
+          setPagination(res.data.data);
+        }
+      } catch {
+        if (!cancelled) {
+          toast.error("Could not load incidents");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadIncidents();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    filters.search,
+    filters.severity,
+    filters.status,
+    filters.environment,
+    filters.category,
+    filters.page,
+    toast,
+  ]);
 
   const hasFilters = filters.search || filters.severity || filters.status || filters.environment || filters.category;
 
@@ -98,6 +122,7 @@ export default function IncidentList() {
               </option>
             ))}
           </select>
+
           <select
             value={filters.status}
             onChange={(e) => updateFilter("status", e.target.value)}
@@ -110,6 +135,7 @@ export default function IncidentList() {
               </option>
             ))}
           </select>
+
           <select
             value={filters.environment}
             onChange={(e) => updateFilter("environment", e.target.value)}
@@ -122,6 +148,7 @@ export default function IncidentList() {
               </option>
             ))}
           </select>
+
           <select
             value={filters.category}
             onChange={(e) => updateFilter("category", e.target.value)}
@@ -134,6 +161,7 @@ export default function IncidentList() {
               </option>
             ))}
           </select>
+
           {hasFilters && (
             <button
               onClick={clearFilters}
@@ -176,6 +204,7 @@ export default function IncidentList() {
                   <th className="px-4 py-3 font-medium">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {items.map((incident) => (
                   <tr key={incident.id} className="border-b border-surface-800 hover:bg-surface-800/40">
@@ -208,6 +237,7 @@ export default function IncidentList() {
             <p className="text-xs text-slate-500">
               Page {pagination.page} of {pagination.total_pages}
             </p>
+
             <div className="flex gap-2">
               <button
                 disabled={filters.page <= 1}
@@ -216,6 +246,7 @@ export default function IncidentList() {
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
+
               <button
                 disabled={filters.page >= pagination.total_pages}
                 onClick={() => updateFilter("page", String(filters.page + 1))}
