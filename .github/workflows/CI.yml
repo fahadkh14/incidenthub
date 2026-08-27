@@ -74,3 +74,11 @@ jobs:
           file: ./backend/Dockerfile 
           push: true 
           tags: ${{ vars.DOCKERHUB_USERNAME }}/incidenthub-backend:latest
+  deploy:
+    needs:
+      - frontend-ci
+      - backend-ci
+
+    uses: ./.github/workflows/CD.yml
+    secrets: inherit
+         
