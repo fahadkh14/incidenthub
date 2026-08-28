@@ -1,15 +1,15 @@
 name: IncidentHub CI
 
 on:
-    workflow_call:
+  workflow_call:
 
 jobs:
   frontend:
     runs-on: ubuntu-latest
     strategy:
-        fail-fast: false
-        matrix:
-          floders: ['backend','frontend']
+      fail-fast: false
+      matrix:
+        folders: ['backend', 'frontend']
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -23,11 +23,6 @@ jobs:
       - name: Docker Build and Push
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.floders }
+          context: ./${{ matrix.folders }}
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/incidenthubi-${{ matrix.floders }latest
-
-  
-
-      
-      
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/incidenthub-${{ matrix.folders }}:latest
