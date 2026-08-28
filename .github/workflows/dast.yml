@@ -14,12 +14,12 @@ jobs:
 
       - name: Wait for services to be healthy
         run: |
-          timeout 60s sh -c 'until curl -s http://${{ secrets.VBOX_HOST }}:8080; do sleep 2; done'
+          timeout 60s sh -c 'until curl -s http://${{ secrets.VBOX_HOST }}:8070; do sleep 2; done'
 
       - name: OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.14.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: 'http://${{ secrets.VBOX_HOST }}:8080'
+          target: 'http://${{ secrets.VBOX_HOST }}:8070'
           fail_action: false
           allow_issue_writing: false
