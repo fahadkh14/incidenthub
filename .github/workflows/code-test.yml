@@ -1,0 +1,49 @@
+name: Code Test 
+
+
+on: 
+    workflow_call:
+
+jobs:
+      test:
+          steps:
+          - name: Checkout Code
+            uses: actions/checkout@v4
+
+          - name: Setup Node.js
+            uses: actions/setup-node@v4
+            with:
+            node-version: 20
+            cache: npm
+            cache-dependency-path: frontend/package.json
+
+          - name: Install Dependencies
+            run: npm ci
+            working-directory: frontend
+
+          - name: Run Linter
+            run: npm run lint
+            working-directory: frontend
+
+
+          - name: Setup Python
+            uses: actions/setup-python@v7
+            with:
+            python-version: '3.13'
+            cache: 'pip'
+
+          - name: Install Dependencies
+            run: pip install -r requirements.txt
+            working-directory: backend  
+
+          - name: Install Lint Tools
+            run: pip install ruff black
+            working-directory: backend
+
+          - name: Ruff Lint
+            run: ruff check .
+            working-directory: backend
+
+          - name: Black Format Check
+            run: black --check .
+            working-directory: backend   
